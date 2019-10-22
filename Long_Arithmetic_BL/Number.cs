@@ -350,7 +350,8 @@ namespace Long_Arithmetic_BL
                 {
                     mulitply[i].Add(0);
                 }
-                for (int j = 0; j < factor1.Count; j++, k++)
+                for (int j = 0; j < factor1.Count; j++)э
+
                 {
                     mulitply[i].Add(factor2[i] * factor1[j]);
                 }
@@ -361,16 +362,71 @@ namespace Long_Arithmetic_BL
 
         public static Number Divide(Number a, Number b, out Number rest)
         {
-            var numerator = a;
-            var denominator = b;
-            long result = 0;
-            while (numerator >= denominator)
+            //var numerator = a;
+            //var denominator = b;
+            //long result = 0;
+            //while (numerator >= denominator)
+            //{
+            //    numerator = Subtract(numerator, denominator);
+            //    result++;
+            //}
+            //rest = numerator;
+            //return new Number(result);
+
+            if (a < b)
             {
-                numerator = Subtract(numerator, denominator);
-                result++;
+                rest = a;
+                return new Number(0);
             }
-            rest = numerator;
-            return new Number(result);
+            else if (a == b)
+            {
+                rest = new Number(0);
+                return new Number(1);
+            }
+            else
+            {
+                List<ulong> result = new List<ulong>();
+
+                while (a > b)
+                {
+                    result.Add(GetQuotientAndDecreseDividend(a, b));
+                }
+                
+
+            }
+        }
+
+        private static ulong GetQuotientAndDecreseDividend(Number dividend, Number divider)
+        {
+            Number currentDividend=new Number();
+            List<ulong> currentDividendValue = new List<ulong>();
+            int indexOfNewDividend = 0;
+            for(int i=dividend.Value.Count-1; i >= 0; i--)
+            {
+                currentDividendValue.Add(dividend.Value[dividend.Value.Count - 1]);
+                currentDividend = new Number(currentDividendValue, '+');
+                if (currentDividend >= divider)
+                {
+                    indexOfNewDividend = i;
+                    break;
+                }
+            }
+            int result = GetQuotient(currentDividend.Value, divider.Value, 0, BASE);
+
+            Number rest = Subtract(currentDividend, Multiply(new Number(result), divider));
+
+            List<ulong> newDividend = new List<ulong>();
+            for(int i = 0; i < indexOfNewDividend; i++)
+            {
+                newDividend.Add(dividend.Value[i]);
+            }
+            foreach(var element in currentDividend.Value)
+            {
+                newDividend.Add(element);
+            }
+
+            dividend = new Number(newDividend, '+');
+            return (ulong)result;
         }
 
         public static Number Exponent(Number a, Number b)
