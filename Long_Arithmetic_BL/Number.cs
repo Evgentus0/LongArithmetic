@@ -254,21 +254,21 @@ namespace Long_Arithmetic_BL
         {
             char sign;
             List<ulong> minued;
-            List<ulong> subtraheтd;
+            List<ulong> subtrahend;
             if (a >= b)
             {
                 minued = a.Value;
-                subtraheтd = b.Value;
+                subtrahend = b.Value;
                 sign = '+';
             }
             else
             {
                 minued = b.Value;
-                subtraheтd = a.Value;
+                subtrahend = a.Value;
                 sign = '-';
             }
 
-            var result = SubractRelevantElements(minued, subtraheтd);
+            var result = SubractRelevantElements(minued, subtrahend);
 
             return new Number(result, sign);
         }
