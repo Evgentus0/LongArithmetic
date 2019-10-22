@@ -7,7 +7,7 @@ namespace Long_Arithmetic_BL
 {
     public class Number:IComparable<Number>
     {
-        private const int BASE= 1000000000;
+        private const int BASE= 1000;
 
         private List<ulong> _number;
         private bool _isPositive;
@@ -257,8 +257,8 @@ namespace Long_Arithmetic_BL
             List<ulong> subtrahend;
             if (a >= b)
             {
-                minued = a.Value;
-                subtrahend = b.Value;
+                minued = new List<ulong>(a.Value);
+                subtrahend = new List<ulong>(b.Value);
                 sign = '+';
             }
             else
@@ -391,7 +391,7 @@ namespace Long_Arithmetic_BL
 
                 while (a > b)
                 {
-                    result.Add(GetQuotientAndDecreseDividend(a, b));
+                    result.Add(GetQuotientAndDecreseDividend(ref a, b));
                 }
 
                 var resOfDivide = new Number(result, '+');
@@ -402,15 +402,14 @@ namespace Long_Arithmetic_BL
             }
         }
 
-        private static ulong GetQuotientAndDecreseDividend(Number dividend, Number divider)
+        private static ulong GetQuotientAndDecreseDividend(ref Number dividend, Number divider)
         {
-            Number currentDividend=new Number();
             List<ulong> currentDividendValue = new List<ulong>();
+            Number currentDividend = new Number(currentDividendValue, '+');
             int indexOfNewDividend = 0;
             for(int i=dividend.Value.Count-1; i >= 0; i--)
             {
-                currentDividendValue.Add(dividend.Value[dividend.Value.Count - 1]);
-                currentDividend = new Number(currentDividendValue, '+');
+                currentDividendValue.Insert(0, dividend.Value[i]);
                 if (currentDividend >= divider)
                 {
                     indexOfNewDividend = i;
@@ -426,7 +425,7 @@ namespace Long_Arithmetic_BL
             {
                 newDividend.Add(dividend.Value[i]);
             }
-            foreach(var element in currentDividend.Value)
+            foreach(var element in rest.Value)
             {
                 newDividend.Add(element);
             }
