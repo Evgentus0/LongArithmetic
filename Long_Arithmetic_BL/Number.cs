@@ -350,8 +350,7 @@ namespace Long_Arithmetic_BL
                 {
                     mulitply[i].Add(0);
                 }
-                for (int j = 0; j < factor1.Count; j++)э
-
+                for (int j = 0; j < factor1.Count; j++)
                 {
                     mulitply[i].Add(factor2[i] * factor1[j]);
                 }
@@ -372,6 +371,7 @@ namespace Long_Arithmetic_BL
             //}
             //rest = numerator;
             //return new Number(result);
+           
 
             if (a < b)
             {
@@ -385,14 +385,20 @@ namespace Long_Arithmetic_BL
             }
             else
             {
+                var beginDividend = new Number(a.Value, '+');
+
                 List<ulong> result = new List<ulong>();
 
                 while (a > b)
                 {
                     result.Add(GetQuotientAndDecreseDividend(a, b));
                 }
-                
 
+                var resOfDivide = new Number(result, '+');
+
+                rest = Subtract(beginDividend, Multiply(b, resOfDivide));
+
+                return resOfDivide;
             }
         }
 
