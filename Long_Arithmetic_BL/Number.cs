@@ -373,6 +373,29 @@ namespace Long_Arithmetic_BL
             return new Number(result);
         }
 
+        public static int GetQuotient(List<ulong> dividende, List<ulong> divider, int leftBorder, int rightBorder)
+        {
+            int currentQuotient = (leftBorder + rightBorder)/ 2;
+            var currentDividende = new Number(dividende, '+');
+            var currentDivider = new Number(divider, '+');
+
+            var current = Number.Multiply(currentDivider, new Number(currentQuotient));
+            int flag = current.CompareTo(Number.Subtract(currentDividende, currentDivider));
+            int flag2 = current.CompareTo(currentDividende);
+            if (flag > 0)
+            {
+                if (flag2 <= 0)
+                { 
+                    return currentQuotient;
+                }
+                else
+                {
+                    return GetQuotient(dividende, divider, leftBorder, currentQuotient);
+                }
+            }
+            return GetQuotient(dividende, divider, currentQuotient, rightBorder);
+        }
+
         public static Number Exponent(Number a, Number b)
         {
             throw new NotImplementedException();
