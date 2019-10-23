@@ -434,7 +434,7 @@ namespace Long_Arithmetic_BL
             return (ulong)result;
         }
 
-        public static int GetQuotient(List<ulong> dividende, List<ulong> divider, int leftBorder, int rightBorder)
+        private static int GetQuotient(List<ulong> dividende, List<ulong> divider, int leftBorder, int rightBorder)
         {
             int currentQuotient = (leftBorder + rightBorder)/ 2;
             var currentDividende = new Number(dividende, '+');
@@ -457,9 +457,19 @@ namespace Long_Arithmetic_BL
             return GetQuotient(dividende, divider, currentQuotient, rightBorder);
         }
 
-        public static Number Exponent(Number a, Number b)
+        public static Number Exponent(Number a, Number n)
         {
-            throw new NotImplementedException();
+            Number rest = new Number();
+            Number.Divide(a, n,out rest);
+            if (Number.Divide(a, n, out rest).ToString() != "0" && rest.ToString() == "0")
+            {
+                 Number halfNumber = Number.Exponent(a, Number.Divide(n, new Number(2), out rest));
+                return Number.Multiply(halfNumber, halfNumber);
+            }
+            else
+            {
+                return Number.Multiply(a, Number.Exponent(a, Number.Subtract(n, new Number(1))));
+            }
         }
     }
 }
