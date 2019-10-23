@@ -202,6 +202,19 @@ namespace Long_Arithmetic_Tests
             Assert.AreEqual("1206", carry.ToString());
         }
 
+        [TestMethod]
+        public void Divide_10000_div_10_return_1000_carry_0()
+        {
+            var a = new Number(10000);
+            var b = new Number(10);
+
+
+            string result = Number.Divide(a, b, out Number carry).ToString();
+
+            Assert.AreEqual("0", result);
+            Assert.AreEqual("1000", carry.ToString());
+        }
+
         #endregion
     }
 }

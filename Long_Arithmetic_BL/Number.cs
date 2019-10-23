@@ -263,8 +263,8 @@ namespace Long_Arithmetic_BL
             }
             else
             {
-                minued = b.Value;
-                subtrahend = a.Value;
+                minued = new List<ulong>(b.Value);
+                subtrahend = new List<ulong>(a.Value);
                 sign = '-';
             }
 
@@ -392,6 +392,11 @@ namespace Long_Arithmetic_BL
                 while (a > b)
                 {
                     result.Add(GetQuotientAndDecreseDividend(ref a, b));
+                    if (a.Value[a.Value.Count - 1] == 0)
+                    {
+
+                    }
+                    
                 }
 
                 var resOfDivide = new Number(result, '+');
@@ -419,6 +424,11 @@ namespace Long_Arithmetic_BL
             int result = GetQuotient(currentDividend.Value, divider.Value, 0, BASE);
 
             Number rest = Subtract(currentDividend, Multiply(new Number(result), divider));
+
+            //if(rest==new Number(0))
+            //{
+            //    rest.Value.RemoveAll(x => x >= 0);
+            //}
 
             List<ulong> newDividend = new List<ulong>();
             for(int i = 0; i < indexOfNewDividend; i++)
