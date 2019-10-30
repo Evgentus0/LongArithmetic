@@ -35,6 +35,8 @@ namespace Long_Arithmetic
                 Number num1 = new Number(firstOperand);
                 Number num2 = new Number(secondOperand);
 
+                var s = num1.ToString();
+
                 labelRest.Text = "0";
 
                 string result = "";

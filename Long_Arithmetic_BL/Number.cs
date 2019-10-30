@@ -5,13 +5,13 @@ using System.Text;
 
 namespace Long_Arithmetic_BL
 {
-    public class Number:IComparable<Number>
+    public class Number : IComparable<Number>
     {
-        private const int BASE= 1000;
+        private const int BASE = 1000000000;
 
         private List<ulong> _number;
         private bool _isPositive;
-        
+
 
         public List<ulong> Value
         {
@@ -54,7 +54,7 @@ namespace Long_Arithmetic_BL
         public Number(long number)
         {
             _number = new List<ulong>();
-            if(number >=0)
+            if (number >= 0)
             {
                 _isPositive = true;
             }
@@ -68,10 +68,10 @@ namespace Long_Arithmetic_BL
         public Number(string number)
         {
             _number = new List<ulong>();
-            if (number[0] =='-')
+            if (number[0] == '-')
             {
                 _isPositive = false;
-                number=number.Substring(1);
+                number = number.Substring(1);
             }
             else
             {
@@ -81,12 +81,12 @@ namespace Long_Arithmetic_BL
                     number = number.Substring(1);
                 }
             }
-            if(!Char.IsDigit(number[0]) || number[0] == '0')
+            if (!Char.IsDigit(number[0]))
             {
                 throw new ArgumentException("Incorrect input!");
-                
+
             }
-            
+
             FromStringNumberToList(number);
         }
 
@@ -96,7 +96,8 @@ namespace Long_Arithmetic_BL
             while (arrayOfNumeral.Length > BASE.ToString().Length - 1)
             {
                 char[] oneRank = new char[BASE.ToString().Length - 1];
-                Array.Copy(arrayOfNumeral, (arrayOfNumeral.Length - (BASE.ToString().Length - 1)), oneRank, 0, BASE.ToString().Length - 1);
+                Array.Copy(arrayOfNumeral, (arrayOfNumeral.Length - (BASE.ToString().Length - 1)),
+                    oneRank, 0, BASE.ToString().Length - 1);
                 var partForDelete = new string(arrayOfNumeral);
                 partForDelete = partForDelete.Remove(arrayOfNumeral.Length - (BASE.ToString().Length - 1));
                 arrayOfNumeral = partForDelete.ToCharArray();
@@ -108,11 +109,25 @@ namespace Long_Arithmetic_BL
         public override string ToString()
         {
             StringBuilder resultReverse = new StringBuilder();
-            foreach(var num in _number)
-            {
-                StringBuilder oneRank = new StringBuilder(num.ToString());
+            //foreach(var num in _number)
+            //{
+            //    StringBuilder oneRank = new StringBuilder(num.ToString());
 
-                if (num != _number.Last())
+            //    if (num != _number.Last())
+            //    {
+            //        while (oneRank.Length < (BASE.ToString().Length - 1))
+            //        {
+            //            oneRank.Insert(0, "0");
+            //        }
+            //    }
+
+            //    resultReverse.Insert(0, oneRank);
+            //}
+            for (int i = 0; i < _number.Count; i++)
+            {
+                StringBuilder oneRank = new StringBuilder(_number[i].ToString());
+
+                if (i != _number.Count - 1)
                 {
                     while (oneRank.Length < (BASE.ToString().Length - 1))
                     {
@@ -126,7 +141,7 @@ namespace Long_Arithmetic_BL
             {
                 resultReverse.Insert(0, "-");
             }
-            
+
             return resultReverse.ToString();
         }
 
@@ -153,7 +168,7 @@ namespace Long_Arithmetic_BL
             }
             else
             {
-                for(int i = value1.Count - 1; i >= 0; i--)
+                for (int i = value1.Count - 1; i >= 0; i--)
                 {
                     if (value1[i] > value2[i])
                     {
@@ -361,18 +376,6 @@ namespace Long_Arithmetic_BL
 
         public static Number Divide(Number a, Number b, out Number rest)
         {
-            //var numerator = a;
-            //var denominator = b;
-            //long result = 0;
-            //while (numerator >= denominator)
-            //{
-            //    numerator = Subtract(numerator, denominator);
-            //    result++;
-            //}
-            //rest = numerator;
-            //return new Number(result);
-           
-
             if (a < b)
             {
                 rest = a;
@@ -389,30 +392,46 @@ namespace Long_Arithmetic_BL
 
                 List<ulong> result = new List<ulong>();
 
-                while (a > b)
-                {
-                    result.Add(GetQuotientAndDecreseDividend(ref a, b));
-                    if (a.Value[a.Value.Count - 1] == 0)
-                    {
+                int indexOfUsedRank = 0;
 
+                while (a >= b)
+                {
+                    if (a.Value.Count > 0 && a.Value[a.Value.Count - 1] == 0)
+                    {
+                        result.Insert(0, 0);
+                        indexOfUsedRank = a.Value.Count - 1;
+                        a.Value.RemoveAt(a.Value.Count - 1);
                     }
-                    
+                    else
+                    {
+                        result.Insert(0, GetQuotientAndDecreseDividend(ref a, b, out indexOfUsedRank));
+                     }
                 }
 
-                var resOfDivide = new Number(result, '+');
+                //if (a == new Number(0))
+                //{
+                //    result.Insert(0, 0);
+                //}
 
-                rest = Subtract(beginDividend, Multiply(b, resOfDivide));
+                for(int i = 0; i < indexOfUsedRank; i++)
+                {
+                    result.Insert(0, 0);
+                }
 
-                return resOfDivide;
+                var resultOfDivide = new Number(result, '+');
+
+                rest = Subtract(beginDividend, Multiply(b, resultOfDivide));
+
+                return resultOfDivide;
             }
         }
 
-        private static ulong GetQuotientAndDecreseDividend(ref Number dividend, Number divider)
+        private static ulong GetQuotientAndDecreseDividend(ref Number dividend, Number divider, out int indexOfLastUsedRank)
         {
             List<ulong> currentDividendValue = new List<ulong>();
             Number currentDividend = new Number(currentDividendValue, '+');
             int indexOfNewDividend = 0;
-            for(int i=dividend.Value.Count-1; i >= 0; i--)
+            for (int i = dividend.Value.Count - 1; i >= 0; i--)
             {
                 currentDividendValue.Insert(0, dividend.Value[i]);
                 if (currentDividend >= divider)
@@ -421,42 +440,45 @@ namespace Long_Arithmetic_BL
                     break;
                 }
             }
-            int result = GetQuotient(currentDividend.Value, divider.Value, 0, BASE);
+            ulong result = GetQuotient(currentDividend.Value, divider.Value, 0, BASE);
 
-            Number rest = Subtract(currentDividend, Multiply(new Number(result), divider));
-
-            //if(rest==new Number(0))
-            //{
-            //    rest.Value.RemoveAll(x => x >= 0);
-            //}
+            Number rest = Subtract(currentDividend, Multiply(new Number((long)result), divider));
 
             List<ulong> newDividend = new List<ulong>();
-            for(int i = 0; i < indexOfNewDividend; i++)
+
+            //нужон допистаь разряд
+            for (int i = 0; i < indexOfNewDividend; i++)
             {
                 newDividend.Add(dividend.Value[i]);
             }
-            foreach(var element in rest.Value)
+
+            //не нужно дописывать еще один разряд
+            if (rest != new Number(0))
             {
-                newDividend.Add(element);
+                foreach (var element in rest.Value)
+                {
+                    newDividend.Add(element);
+                }
             }
 
             dividend = new Number(newDividend, '+');
+            indexOfLastUsedRank = indexOfNewDividend;
             return (ulong)result;
         }
 
-        public static int GetQuotient(List<ulong> dividende, List<ulong> divider, int leftBorder, int rightBorder)
+        public static ulong GetQuotient(List<ulong> dividende, List<ulong> divider, ulong leftBorder, ulong rightBorder)
         {
-            int currentQuotient = (leftBorder + rightBorder)/ 2;
+            ulong currentQuotient = (leftBorder + rightBorder) / 2;
             var currentDividende = new Number(dividende, '+');
             var currentDivider = new Number(divider, '+');
 
-            var current = Number.Multiply(currentDivider, new Number(currentQuotient));
+            var current = Number.Multiply(currentDivider, new Number((long)currentQuotient));
             int flag = current.CompareTo(Number.Subtract(currentDividende, currentDivider));
             int flag2 = current.CompareTo(currentDividende);
             if (flag > 0)
             {
                 if (flag2 <= 0)
-                { 
+                {
                     return currentQuotient;
                 }
                 else
