@@ -466,7 +466,7 @@ namespace Long_Arithmetic_BL
             return (ulong)result;
         }
 
-        private static int GetQuotient(List<ulong> dividende, List<ulong> divider, int leftBorder, int rightBorder)
+        private static ulong GetQuotient(List<ulong> dividende, List<ulong> divider, ulong leftBorder, ulong rightBorder)
         {
             ulong currentQuotient = (leftBorder + rightBorder) / 2;
             var currentDividende = new Number(dividende, '+');
