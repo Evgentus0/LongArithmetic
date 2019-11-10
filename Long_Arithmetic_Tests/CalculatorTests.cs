@@ -211,10 +211,9 @@ namespace Long_Arithmetic_Tests
 
             string result = Number.Divide(a, b, out Number carry).ToString();
 
-            Assert.AreEqual("0", result);
-            Assert.AreEqual("1000", carry.ToString());
+            Assert.AreEqual("1000", result);
+            Assert.AreEqual("0", carry.ToString());
         }
-
         #endregion
     }
 }

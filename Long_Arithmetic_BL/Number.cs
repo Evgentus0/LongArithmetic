@@ -8,6 +8,7 @@ namespace Long_Arithmetic_BL
     public class Number : IComparable<Number>
     {
         private const int BASE = 1000000000;
+        //private const int BASE = 10;
 
         private List<ulong> _number;
         private bool _isPositive;
@@ -217,8 +218,8 @@ namespace Long_Arithmetic_BL
         public static Number Add(Number firstExpr, Number secondExpr)
         {
             var sum = AddRelevantElements(firstExpr.Value, secondExpr.Value);
-            var result = AlignRanks(sum);
-            return new Number(result, '+');
+            AlignRanks(sum);
+            return new Number(sum, '+');
         }
 
         private static List<ulong> AddRelevantElements(List<ulong> first, List<ulong> second)
@@ -247,7 +248,7 @@ namespace Long_Arithmetic_BL
             return sum;
         }
 
-        private static List<ulong> AlignRanks(List<ulong> sum)
+        private static void AlignRanks(List<ulong> sum)
         {
             for (int i = 0; i < sum.Count - 1; i++)
             {
@@ -262,7 +263,6 @@ namespace Long_Arithmetic_BL
                 sum.Insert(sum.Count, sum[sum.Count - 1] / BASE);
                 sum[sum.Count - 2] = sum[sum.Count - 2] % BASE;
             }
-            return sum;
         }
 
         public static Number Subtract(Number a, Number b)
@@ -348,8 +348,9 @@ namespace Long_Arithmetic_BL
             foreach (var mul in mulitply)
             {
                 result = AddRelevantElements(result, mul);
-                result = AlignRanks(result);
+                AlignRanks(result);
             }
+            // MultiplyByRef(factor1, factor2);
             return new Number(result, '+');
         }
 
@@ -369,13 +370,18 @@ namespace Long_Arithmetic_BL
                 {
                     mulitply[i].Add(factor2[i] * factor1[j]);
                 }
-                mulitply[i] = AlignRanks(mulitply[i]);
+                AlignRanks(mulitply[i]);
             }
             return mulitply;
         }
 
         public static Number Divide(Number a, Number b, out Number rest)
         {
+            if (b == new Number(0))
+            {
+                throw new DivideByZeroException("Incorrect input data!");
+            }
+
             if (a < b)
             {
                 rest = a;
@@ -405,15 +411,10 @@ namespace Long_Arithmetic_BL
                     else
                     {
                         result.Insert(0, GetQuotientAndDecreseDividend(ref a, b, out indexOfUsedRank));
-                     }
+                    }
                 }
 
-                //if (a == new Number(0))
-                //{
-                //    result.Insert(0, 0);
-                //}
-
-                for(int i = 0; i < indexOfUsedRank; i++)
+                for (int i = 0; i < indexOfUsedRank; i++)
                 {
                     result.Insert(0, 0);
                 }
@@ -491,17 +492,128 @@ namespace Long_Arithmetic_BL
 
         public static Number Exponent(Number a, Number n)
         {
-            Number rest = new Number();
-            Number.Divide(a, n,out rest);
-            if (Number.Divide(a, n, out rest).ToString() != "0" && rest.ToString() == "0")
+            //Number rest = new Number();
+            //Number.Divide(a, n,out rest);
+            //if (Number.Divide(a, n, out rest).ToString() != "0" && rest.ToString() == "0")
+            //{
+            //     Number halfNumber = Number.Exponent(a, Number.Divide(n, new Number(2), out rest));
+            //    return Number.Multiply(halfNumber, halfNumber);
+            //}
+            //else
+            //{
+            //    return Number.Multiply(a, Number.Exponent(a, Number.Subtract(n, new Number(1))));
+            //}
+
+            if (a.ToString() == "0" && a.ToString() == "1")
             {
-                 Number halfNumber = Number.Exponent(a, Number.Divide(n, new Number(2), out rest));
-                return Number.Multiply(halfNumber, halfNumber);
+                return new Number(1);
             }
             else
             {
-                return Number.Multiply(a, Number.Exponent(a, Number.Subtract(n, new Number(1))));
+                var num1 = new Number(new List<ulong>(a.Value), '+');
+                var num2 = new Number(new List<ulong>(n.Value), '+');
+                return DoExponent(num1.Value, num2.Value);
+            }
+        }
+
+        private static Number DoExponent(List<ulong> a, List<ulong> b)
+        {
+
+            //if (b.ToString() == "0")
+            //{
+            //    return new Number(1);
+            //}
+            //var result = DoExponent(a, Divide(b, new Number(2), out Number rest));
+            //if (b.Value.First() % 2 == 0)
+            //{
+            //    return Multiply(result, result);
+            //}
+            //else
+            //{
+            //    return Multiply(result, Multiply(result, a));
+            //}
+
+            var result = new List<ulong>(a);
+
+            while (!(b.Count==1&&b.First()<2))
+            {
+                if (b.First() % 2 == 0)
+                {
+                    MultiplyByRef(result, result);
+                }
+                else
+                {
+                    MultiplyByRef(result, result);
+                    MultiplyByRef(result, a);
+                }
+                DivideByTwo(b);
+            }
+
+            return new Number(result, '+');
+        }
+
+        private static void MultiplyByRef(List<ulong> result, List<ulong> a)
+        {
+            var current = new List<ulong>(result);
+            var factor2 = new List<ulong>(a);
+            //первый проход, для задания значений
+            for (int j = 0; j < current.Count; j++)
+            {
+                result[j] = factor2[0] * current[j];
+            }
+            AlignRanks(result);
+
+            //все остальные проходы
+
+            for (int i = 1; i < factor2.Count; i++)
+            {
+                for(int j = 0; j < current.Count; j++)
+                {
+                    if (result.Count <= i + j)
+                    {
+                        result.Insert(result.Count, factor2[i] * current[j]);
+                    }
+                    else
+                    {
+                        result[j + i] += factor2[i] * current[j];
+                    }
+                }
+                AlignRanks(result);
+            }
+        }
+
+        private static void DivideByTwo(List<ulong> dividend)
+        {
+            ulong current;
+            for (int i = dividend.Count - 1; i >= 0; i--)
+            {
+                current = dividend[i];
+                if (current == 0)
+                {
+                    continue;
+                }
+                else if (current == 1)
+                {
+                    dividend[i] = 0;
+                    i--;
+                    if (i < 0)
+                    {
+                        break;
+                    }
+                    current += BASE + dividend[i];
+                    dividend[i] = current / 2;
+                    continue;
+                }
+                else
+                {
+                    dividend[i] = current / 2;
+                }
+            }
+            if (dividend[dividend.Count - 1] == 0)
+            {
+                dividend.RemoveAt(dividend.Count - 1);
             }
         }
     }
 }
+

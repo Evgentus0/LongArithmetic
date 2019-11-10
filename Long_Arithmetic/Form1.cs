@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,7 +60,11 @@ namespace Long_Arithmetic
                         result = Number.Divide(num1, num2, out Number rest).ToString();
                         labelRest.Text = rest.ToString();
                         break;
+                    case "Power":
+                        result = Number.Exponent(num1, num2).ToString();
+                        break;
                 }
+                File.WriteAllText(@"C:\Users\Evgentus\Desktop\result.txt", result);
                 labelResult.Text = result;
                 
             }
