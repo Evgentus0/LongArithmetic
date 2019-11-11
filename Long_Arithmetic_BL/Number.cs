@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Long_Arithmetic_BL
 {
@@ -375,7 +376,7 @@ namespace Long_Arithmetic_BL
             return mulitply;
         }
 
-        public static Number Divide(Number a, Number b, out Number rest)
+        public static (Number result, Number rest) Divide(Number a, Number b)
         {
             if (b == new Number(0))
             {
@@ -384,13 +385,11 @@ namespace Long_Arithmetic_BL
 
             if (a < b)
             {
-                rest = a;
-                return new Number(0);
+                return (new Number(0), a);
             }
             else if (a == b)
             {
-                rest = new Number(0);
-                return new Number(1);
+                return (new Number(1), new Number(0));
             }
             else
             {
@@ -421,9 +420,9 @@ namespace Long_Arithmetic_BL
 
                 var resultOfDivide = new Number(result, '+');
 
-                rest = Subtract(beginDividend, Multiply(b, resultOfDivide));
+                var rest = Subtract(beginDividend, Multiply(b, resultOfDivide));
 
-                return resultOfDivide;
+                return (resultOfDivide, rest);
             }
         }
 
@@ -492,9 +491,13 @@ namespace Long_Arithmetic_BL
 
         public static Number Exponent(Number a, Number n)
         {
-            if (a.ToString() == "0" && a.ToString() == "1")
+            if (n.ToString() == "0" || a.ToString() == "1")
             {
                 return new Number(1);
+            }
+            else if (a.ToString() == "0")
+            {
+                return new Number(0);
             }
             else
             {
@@ -508,15 +511,12 @@ namespace Long_Arithmetic_BL
         {
             var result = new List<ulong>(a);
 
-            while (!(b.Count==1&&b.First()<2))
+            while (!(b.Count == 1 && b.First() < 2))
             {
-                if (b.First() % 2 == 0)
+                MultiplyByRef(result, result);
+
+                if (b.First() % 2 != 0)
                 {
-                    MultiplyByRef(result, result);
-                }
-                else
-                {
-                    MultiplyByRef(result, result);
                     MultiplyByRef(result, a);
                 }
                 DivideByTwo(b);
@@ -540,7 +540,7 @@ namespace Long_Arithmetic_BL
 
             for (int i = 1; i < factor2.Count; i++)
             {
-                for(int j = 0; j < current.Count; j++)
+                for (int j = 0; j < current.Count; j++)
                 {
                     if (result.Count <= i + j)
                     {
@@ -590,11 +590,84 @@ namespace Long_Arithmetic_BL
 
         public static Number Module(Number a, Number b)
         {
-            var result = new Number();
-            Divide(a, b, out result);
-            return result;
+            return Divide(a, b).rest;
         }
 
+        public static Number ExponentWithModule(Number a, Number b, Number module)
+        {
+            if (module.ToString() == "1" || a.ToString() == "1" || a.ToString() == "0" || b.ToString() == "0")
+            {
+                if (a.ToString() == "0")
+                {
+                    return new Number(0);
+                }
+                else
+                {
+                    return new Number(1);
+                }
+            }
+            else
+            {
+                return DoExponentWithModule(a.Value, b.Value, module);
+            }
+        }
+
+        private static Number DoExponentWithModule(List<ulong> a, List<ulong> b, Number module)
+        {
+            var result = new List<ulong>(a);
+
+            while (!(b.Count == 1 && b.First() < 2))
+            {
+                MultiplyByRef(result, result);
+
+                if (b.First() % 2 != 0)
+                {
+                    MultiplyByRef(result, a);
+                }
+                result = Module(new Number(result, '+'), module).Value;
+
+                DivideByTwo(b);
+            }
+
+            return new Number(result, '+');
+        }
+
+        #region Async Method
+        public static async Task<Number> AddAsync(Number a, Number b)
+        {
+            return await Task.Run(() => Add(a, b));
+        }
+
+        public static async Task<Number> SubtractAsync(Number a, Number b)
+        {
+            return await Task.Run(() => Subtract(a, b));
+        }
+
+        public static async Task<Number> MultiplyAsync(Number a, Number b)
+        {
+            return await Task.Run(() => Multiply(a, b));
+        }
+
+        public static async Task<(Number result, Number rest)> DivideAsync(Number a, Number b)
+        {
+            return await Task.Run(() => Divide(a, b));
+        }
+
+        public static async Task<Number> ExponentAsync(Number a, Number b)
+        {
+            return await Task.Run(() => Exponent(a, b));
+        }
+
+        public static async Task<Number> ModuleAsync(Number a, Number b)
+        {
+            return await Task.Run(() => Module(a, b));
+        }
+
+        public static async Task<Number> ExponentWithModuleAsync(Number a, Number b, Number module)
+        {
+            return await Task.Run(() => ExponentWithModule(a, b, module));
+        }
+        #endregion
     }
 }
 

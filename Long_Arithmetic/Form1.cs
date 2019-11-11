@@ -14,14 +14,20 @@ namespace Long_Arithmetic
 {   
     public partial class Form1 : Form
     {
+        private double _timeSecond;
+        private int _timeMinute;
+        private ulong _timeHour;
         public Form1()
         {
             InitializeComponent();
             string[] operations = { "Add", "Subtract", "Multiply", "Divide", "Power", "Module" };
             comboBoxOperation.DataSource = operations;
+            _timeSecond = 0;
+            _timeMinute = 0;
+            _timeHour = 0;
         }
 
-        private void ButtonCalculate_Click(object sender, EventArgs e)
+        private async void ButtonCalculate_Click(object sender, EventArgs e)
         {
             try
             {
@@ -36,39 +42,86 @@ namespace Long_Arithmetic
                 Number num1 = new Number(firstOperand);
                 Number num2 = new Number(secondOperand);
 
-                var s = num1.ToString();
+                Number module=new Number();
+                if (checkBoxUseModule.Checked)
+                {
+                    module = new Number(textBoxModule.Text);
+                }
 
                 labelRest.Text = "0";
 
-                string result = "";
+                Number result = new Number();
+                timer.Interval = 10;
+                timer.Start();
 
                 switch (comboBoxOperation.Text)
                 {
                     case "Add":
-                        result = Number.Add(num1, num2).ToString();
+                        if (checkBoxUseModule.Checked)
+                        {
+                            result = await Number.ModuleAsync(Number.Add(num1, num2), module);
+                        }
+                        else
+                        {
+                            result = await Number.AddAsync(num1, num2);
+                        }
                         break;
 
                     case "Subtract":
-                        result = Number.Subtract(num1, num2).ToString();
+                        if (checkBoxUseModule.Checked)
+                        {
+                            result = await Number.ModuleAsync(Number.Subtract(num1, num2), module);
+                        }
+                        else
+                        {
+                            result = await Number.SubtractAsync(num1, num2);
+                        }
                         break;
 
                     case "Multiply":
-                        result = Number.Multiply(num1, num2).ToString();
+                        if (checkBoxUseModule.Checked)
+                        {
+                            result = await Number.ModuleAsync(Number.Multiply(num1, num2), module);
+                        }
+                        else
+                        {
+                            result = await Number.MultiplyAsync(num1, num2);
+                        }
                         break;
 
                     case "Divide":
-                        result = Number.Divide(num1, num2, out Number rest).ToString();
-                        labelRest.Text = rest.ToString();
+                        var res = await Number.DivideAsync(num1, num2);
+                        result = res.result;
+                        labelRest.Text = res.rest.ToString();
                         break;
                     case "Power":
-                        result = Number.Exponent(num1, num2).ToString();
+                        if (checkBoxUseModule.Checked)
+                        {
+                            result =await Number.ExponentWithModuleAsync(num1, num2, module);
+                        }
+                        else
+                        {
+                            result = await Number.ExponentAsync(num1, num2);
+                        }
                         break;
                     case "Module":
-                        result = Number.Module(num1, num2).ToString();
+                        if (checkBoxUseModule.Checked)
+                        {
+                            result = await Number.ModuleAsync(Number.Module(num1, num2), module);
+                        }
+                        else
+                        {
+                            result = await Number.ModuleAsync(num1, num2);
+                        }
                         break;
                 }
-                File.WriteAllText(@"C:\Users\Evgentus\Desktop\result.txt", result);
-                labelResult.Text = result;
+                timer.Stop();
+                string resultString = result.ToString();
+                using (StreamWriter writer = new StreamWriter(@"C:\Users\Evgentus\Desktop\result.txt", false))
+                {
+                    await writer.WriteLineAsync(resultString);  // асинхронная запись в файл
+                }
+                labelResult.Text = resultString;
                 
             }
             catch (Exception ex)
@@ -89,6 +142,23 @@ namespace Long_Arithmetic
             {
                 textBoxModule.Enabled = false;
             }
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            _timeSecond += 0.01;
+
+            if (_timeSecond >= 60)
+            {
+                _timeMinute++;
+                _timeSecond = 0;
+            }
+            if (_timeMinute >= 60)
+            {
+                _timeHour++;
+                _timeMinute = 0;
+            }
+            timeLabel.Text = $"{_timeHour} h, {_timeMinute} m, {_timeSecond} s";
         }
     }
 }

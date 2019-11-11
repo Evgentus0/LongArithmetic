@@ -181,12 +181,13 @@ namespace Long_Arithmetic_Tests
         {
             var a = new Number(180);
             var b = new Number(33);
-            
 
-            string result = Number.Divide(a, b, out Number carry).ToString();
 
-            Assert.AreEqual("5", result);
-            Assert.AreEqual("15", carry.ToString());
+            var result = Number.Divide(a, b);
+
+
+            Assert.AreEqual("5", result.result.ToString());
+            Assert.AreEqual("15", result.rest.ToString());
         }
 
         [TestMethod]
@@ -196,10 +197,10 @@ namespace Long_Arithmetic_Tests
             var b = new Number(5665);
 
 
-            string result = Number.Divide(a, b, out Number carry).ToString();
+            var result = Number.Divide(a, b);
 
-            Assert.AreEqual("2", result);
-            Assert.AreEqual("1206", carry.ToString());
+            Assert.AreEqual("2", result.result.ToString());
+            Assert.AreEqual("1206", result.rest.ToString());
         }
 
         [TestMethod]
@@ -209,10 +210,10 @@ namespace Long_Arithmetic_Tests
             var b = new Number(10);
 
 
-            string result = Number.Divide(a, b, out Number carry).ToString();
+            var result = Number.Divide(a, b);
 
-            Assert.AreEqual("1000", result);
-            Assert.AreEqual("0", carry.ToString());
+            Assert.AreEqual("1000", result.result.ToString());
+            Assert.AreEqual("0", result.rest.ToString());
         }
 
         [TestMethod]
@@ -225,6 +226,18 @@ namespace Long_Arithmetic_Tests
             string result = Number.Module(a, b).ToString();
 
             Assert.AreEqual("616", result);
+        }
+
+        [TestMethod]
+        public void ExponentWithModule_4132_pow_3_mod_1524_return_1504()
+        {
+            var a = new Number(4132);
+            var b = new Number(3);
+            var module = new Number(1524);
+
+            string result = Number.ExponentWithModule(a, b, module).ToString();
+
+            Assert.AreEqual("1504", result);
         }
         #endregion
     }
