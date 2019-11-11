@@ -492,18 +492,6 @@ namespace Long_Arithmetic_BL
 
         public static Number Exponent(Number a, Number n)
         {
-            //Number rest = new Number();
-            //Number.Divide(a, n,out rest);
-            //if (Number.Divide(a, n, out rest).ToString() != "0" && rest.ToString() == "0")
-            //{
-            //     Number halfNumber = Number.Exponent(a, Number.Divide(n, new Number(2), out rest));
-            //    return Number.Multiply(halfNumber, halfNumber);
-            //}
-            //else
-            //{
-            //    return Number.Multiply(a, Number.Exponent(a, Number.Subtract(n, new Number(1))));
-            //}
-
             if (a.ToString() == "0" && a.ToString() == "1")
             {
                 return new Number(1);
@@ -518,21 +506,6 @@ namespace Long_Arithmetic_BL
 
         private static Number DoExponent(List<ulong> a, List<ulong> b)
         {
-
-            //if (b.ToString() == "0")
-            //{
-            //    return new Number(1);
-            //}
-            //var result = DoExponent(a, Divide(b, new Number(2), out Number rest));
-            //if (b.Value.First() % 2 == 0)
-            //{
-            //    return Multiply(result, result);
-            //}
-            //else
-            //{
-            //    return Multiply(result, Multiply(result, a));
-            //}
-
             var result = new List<ulong>(a);
 
             while (!(b.Count==1&&b.First()<2))
@@ -614,6 +587,14 @@ namespace Long_Arithmetic_BL
                 dividend.RemoveAt(dividend.Count - 1);
             }
         }
+
+        public static Number Module(Number a, Number b)
+        {
+            var result = new Number();
+            Divide(a, b, out result);
+            return result;
+        }
+
     }
 }
 

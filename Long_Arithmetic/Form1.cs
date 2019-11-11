@@ -17,7 +17,7 @@ namespace Long_Arithmetic
         public Form1()
         {
             InitializeComponent();
-            string[] operations = { "Add", "Subtract", "Multiply", "Divide", "Power" };
+            string[] operations = { "Add", "Subtract", "Multiply", "Divide", "Power", "Module" };
             comboBoxOperation.DataSource = operations;
         }
 
@@ -63,6 +63,9 @@ namespace Long_Arithmetic
                     case "Power":
                         result = Number.Exponent(num1, num2).ToString();
                         break;
+                    case "Module":
+                        result = Number.Module(num1, num2).ToString();
+                        break;
                 }
                 File.WriteAllText(@"C:\Users\Evgentus\Desktop\result.txt", result);
                 labelResult.Text = result;
@@ -74,6 +77,18 @@ namespace Long_Arithmetic
             }
 
             
+        }
+
+        private void CheckBoxUseModule_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxUseModule.Checked)
+            {
+                textBoxModule.Enabled = true;
+            }
+            else
+            {
+                textBoxModule.Enabled = false;
+            }
         }
     }
 }

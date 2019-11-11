@@ -214,6 +214,18 @@ namespace Long_Arithmetic_Tests
             Assert.AreEqual("1000", result);
             Assert.AreEqual("0", carry.ToString());
         }
+
+        [TestMethod]
+        public void Module_124124_div_5614_return_616()
+        {
+            var a = new Number(124124);
+            var b = new Number(5614);
+
+
+            string result = Number.Module(a, b).ToString();
+
+            Assert.AreEqual("616", result);
+        }
         #endregion
     }
 }

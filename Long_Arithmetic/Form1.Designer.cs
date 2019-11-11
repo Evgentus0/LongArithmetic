@@ -39,13 +39,16 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.labelRest = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.checkBoxUseModule = new System.Windows.Forms.CheckBox();
+            this.textBoxModule = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(13, 218);
+            this.label1.Location = new System.Drawing.Point(13, 290);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(59, 20);
@@ -55,7 +58,7 @@
             // labelResult
             // 
             this.labelResult.AutoSize = true;
-            this.labelResult.Location = new System.Drawing.Point(93, 218);
+            this.labelResult.Location = new System.Drawing.Point(80, 290);
             this.labelResult.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelResult.Name = "labelResult";
             this.labelResult.Size = new System.Drawing.Size(18, 20);
@@ -64,7 +67,7 @@
             // 
             // buttonCalculate
             // 
-            this.buttonCalculate.Location = new System.Drawing.Point(17, 332);
+            this.buttonCalculate.Location = new System.Drawing.Point(12, 387);
             this.buttonCalculate.Name = "buttonCalculate";
             this.buttonCalculate.Size = new System.Drawing.Size(94, 35);
             this.buttonCalculate.TabIndex = 2;
@@ -133,7 +136,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label5.Location = new System.Drawing.Point(13, 284);
+            this.label5.Location = new System.Drawing.Point(13, 340);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(124, 20);
@@ -144,12 +147,42 @@
             // 
             this.labelRest.AutoSize = true;
             this.labelRest.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelRest.Location = new System.Drawing.Point(145, 284);
+            this.labelRest.Location = new System.Drawing.Point(145, 340);
             this.labelRest.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelRest.Name = "labelRest";
             this.labelRest.Size = new System.Drawing.Size(18, 20);
             this.labelRest.TabIndex = 10;
             this.labelRest.Text = "0";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label6.Location = new System.Drawing.Point(140, 183);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(61, 20);
+            this.label6.TabIndex = 11;
+            this.label6.Text = "Module";
+            // 
+            // checkBoxUseModule
+            // 
+            this.checkBoxUseModule.AutoSize = true;
+            this.checkBoxUseModule.Location = new System.Drawing.Point(13, 185);
+            this.checkBoxUseModule.Name = "checkBoxUseModule";
+            this.checkBoxUseModule.Size = new System.Drawing.Size(113, 24);
+            this.checkBoxUseModule.TabIndex = 12;
+            this.checkBoxUseModule.Text = "Use module";
+            this.checkBoxUseModule.UseVisualStyleBackColor = true;
+            this.checkBoxUseModule.CheckedChanged += new System.EventHandler(this.CheckBoxUseModule_CheckedChanged);
+            // 
+            // textBoxModule
+            // 
+            this.textBoxModule.Enabled = false;
+            this.textBoxModule.Location = new System.Drawing.Point(208, 183);
+            this.textBoxModule.Name = "textBoxModule";
+            this.textBoxModule.Size = new System.Drawing.Size(453, 26);
+            this.textBoxModule.TabIndex = 13;
             // 
             // Form1
             // 
@@ -157,6 +190,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(1200, 692);
+            this.Controls.Add(this.textBoxModule);
+            this.Controls.Add(this.checkBoxUseModule);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.labelRest);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
@@ -190,6 +226,9 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label labelRest;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.CheckBox checkBoxUseModule;
+        private System.Windows.Forms.TextBox textBoxModule;
     }
 }
 
