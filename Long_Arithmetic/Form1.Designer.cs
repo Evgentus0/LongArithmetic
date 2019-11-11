@@ -44,7 +44,6 @@
             this.checkBoxUseModule = new System.Windows.Forms.CheckBox();
             this.textBoxModule = new System.Windows.Forms.TextBox();
             this.timer = new System.Windows.Forms.Timer(this.components);
-            this.label7 = new System.Windows.Forms.Label();
             this.timeLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -193,23 +192,14 @@
             this.timer.Interval = 10;
             this.timer.Tick += new System.EventHandler(this.Timer_Tick);
             // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(0, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(51, 20);
-            this.label7.TabIndex = 14;
-            this.label7.Text = "label7";
-            // 
             // timeLabel
             // 
             this.timeLabel.AutoSize = true;
             this.timeLabel.Location = new System.Drawing.Point(893, 9);
             this.timeLabel.Name = "timeLabel";
-            this.timeLabel.Size = new System.Drawing.Size(30, 20);
+            this.timeLabel.Size = new System.Drawing.Size(94, 20);
             this.timeLabel.TabIndex = 15;
-            this.timeLabel.Text = "0 s";
+            this.timeLabel.Text = "0 h, 0 m, 0 s";
             // 
             // Form1
             // 
@@ -218,7 +208,6 @@
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(1200, 692);
             this.Controls.Add(this.timeLabel);
-            this.Controls.Add(this.label7);
             this.Controls.Add(this.textBoxModule);
             this.Controls.Add(this.checkBoxUseModule);
             this.Controls.Add(this.label6);
@@ -259,7 +248,6 @@
         private System.Windows.Forms.CheckBox checkBoxUseModule;
         private System.Windows.Forms.TextBox textBoxModule;
         private System.Windows.Forms.Timer timer;
-        private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label timeLabel;
     }
 }

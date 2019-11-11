@@ -503,26 +503,44 @@ namespace Long_Arithmetic_BL
             {
                 var num1 = new Number(new List<ulong>(a.Value), '+');
                 var num2 = new Number(new List<ulong>(n.Value), '+');
-                return DoExponent(num1.Value, num2.Value);
+                return new Number(DoExponent(num1.Value, num2.Value), '+');
             }
         }
 
-        private static Number DoExponent(List<ulong> a, List<ulong> b)
+        private static List<ulong> DoExponent(List<ulong> a, List<ulong> b)
         {
-            var result = new List<ulong>(a);
+            //var result = new List<ulong>(a);
 
-            while (!(b.Count == 1 && b.First() < 2))
+            //while (!(b.Count == 1 && b.First() < 2))
+            //{
+            //    MultiplyByRef(result, result);
+
+            //    if (b.First() % 2 != 0)
+            //    {
+            //        MultiplyByRef(result, a);
+            //    }
+            //    DivideByTwo(b);
+            //}
+
+            //return new Number(result, '+');
+
+            if (b.Count == 1 && b.First() < 2)
             {
-                MultiplyByRef(result, result);
-
-                if (b.First() % 2 != 0)
-                {
-                    MultiplyByRef(result, a);
-                }
-                DivideByTwo(b);
+                return a;
             }
 
-            return new Number(result, '+');
+            else
+            {
+                var x = DoExponent(a, Divide(new Number(b, '+'), new Number(2)).result.Value);
+                if (b.First() % 2 == 0)
+                {
+                    return Multiply(new Number(x, '+'), new Number(x, '+')).Value;
+                }
+                else
+                {
+                    return Multiply(new Number(x, '+'), Multiply(new Number(x, '+'), new Number(a, '+'))).Value;
+                }
+            }
         }
 
         private static void MultiplyByRef(List<ulong> result, List<ulong> a)
@@ -608,28 +626,46 @@ namespace Long_Arithmetic_BL
             }
             else
             {
-                return DoExponentWithModule(a.Value, b.Value, module);
+                return new Number(DoExponentWithModule(a.Value, b.Value, module), '+');
             }
         }
 
-        private static Number DoExponentWithModule(List<ulong> a, List<ulong> b, Number module)
+        private static List<ulong> DoExponentWithModule(List<ulong> a, List<ulong> b, Number module)
         {
-            var result = new List<ulong>(a);
+            //var result = new List<ulong>(a);
 
-            while (!(b.Count == 1 && b.First() < 2))
+            //while (!(b.Count == 1 && b.First() < 2))
+            //{
+            //    MultiplyByRef(result, result);
+
+            //    if (b.First() % 2 != 0)
+            //    {
+            //        MultiplyByRef(result, a);
+            //    }
+            //    result = Module(new Number(result, '+'), module).Value;
+
+            //    DivideByTwo(b);
+            //}
+
+            //return new Number(result, '+');
+
+            if (b.Count == 1 && b.First() < 2)
             {
-                MultiplyByRef(result, result);
-
-                if (b.First() % 2 != 0)
-                {
-                    MultiplyByRef(result, a);
-                }
-                result = Module(new Number(result, '+'), module).Value;
-
-                DivideByTwo(b);
+                return Module(new Number(a, '+'), module).Value;
             }
 
-            return new Number(result, '+');
+            else
+            {
+                var x = DoExponentWithModule(a, Divide(new Number(b, '+'), new Number(2)).result.Value, module);
+                if (b.First() % 2 == 0)
+                {
+                    return Module(Multiply(new Number(x, '+'), new Number(x, '+')), module).Value;
+                }
+                else
+                {
+                    return Module(Multiply(new Number(x, '+'), Multiply(new Number(x, '+'), new Number(a, '+'))), module).Value;
+                }
+            }
         }
 
         #region Async Method
