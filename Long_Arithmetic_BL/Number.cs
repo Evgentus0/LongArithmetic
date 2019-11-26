@@ -668,6 +668,43 @@ namespace Long_Arithmetic_BL
             }
         }
 
+        public static Number Sqrt(Number x)
+        {
+            if (!x.IsPositive)
+            {
+                throw new ArgumentException("Expr under sqrt can not be negative!");
+            }
+            return DoSqrt(x, new Number(0), new Number(x.Value, '+'));
+
+        }
+
+        private static Number DoSqrt(Number x, Number a, Number b)
+        {
+            if(Add(a, new Number(1)) == b){
+                if (Multiply(b, b) <= x)
+                {
+                    return b;
+                }
+                else
+                {
+                    return a;
+                }
+            }
+            else
+            {
+                Number middle = Add(a, b);
+                DivideByTwo(middle.Value);
+                if(Multiply(middle, middle) < x)
+                {
+                    return DoSqrt(x, middle, b);
+                }
+                else
+                {
+                    return DoSqrt(x, a, middle);
+                }
+            }
+        }
+
         #region Async Method
         public static async Task<Number> AddAsync(Number a, Number b)
         {
@@ -703,7 +740,14 @@ namespace Long_Arithmetic_BL
         {
             return await Task.Run(() => ExponentWithModule(a, b, module));
         }
+
+        public static async Task<Number> SqrtAsync(Number a)
+        {
+            return await Task.Run(() => Sqrt(a));
+        }
         #endregion
+
+
     }
 }
 

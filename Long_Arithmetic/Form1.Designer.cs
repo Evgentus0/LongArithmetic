@@ -45,6 +45,9 @@
             this.textBoxModule = new System.Windows.Forms.TextBox();
             this.timer = new System.Windows.Forms.Timer(this.components);
             this.timeLabel = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.buttonAddEquation = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -123,6 +126,7 @@
             this.comboBoxOperation.Name = "comboBoxOperation";
             this.comboBoxOperation.Size = new System.Drawing.Size(516, 28);
             this.comboBoxOperation.TabIndex = 7;
+            this.comboBoxOperation.SelectedIndexChanged += new System.EventHandler(this.ComboBoxOperation_SelectedIndexChanged);
             // 
             // label4
             // 
@@ -201,12 +205,43 @@
             this.timeLabel.TabIndex = 15;
             this.timeLabel.Text = "0 h, 0 m, 0 s";
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(699, 128);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(460, 20);
+            this.label7.TabIndex = 16;
+            this.label7.Text = "Click \"add\" to add the equation and click \"delete\" for remove last\r\n";
+            // 
+            // buttonAddEquation
+            // 
+            this.buttonAddEquation.Location = new System.Drawing.Point(703, 162);
+            this.buttonAddEquation.Name = "buttonAddEquation";
+            this.buttonAddEquation.Size = new System.Drawing.Size(68, 41);
+            this.buttonAddEquation.TabIndex = 17;
+            this.buttonAddEquation.Text = "add";
+            this.buttonAddEquation.UseVisualStyleBackColor = true;
+            this.buttonAddEquation.Click += new System.EventHandler(this.ButtonAddEquation_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(1091, 162);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(68, 41);
+            this.button2.TabIndex = 18;
+            this.button2.Text = "delete";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1200, 692);
+            this.ClientSize = new System.Drawing.Size(1236, 512);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.buttonAddEquation);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.timeLabel);
             this.Controls.Add(this.textBoxModule);
             this.Controls.Add(this.checkBoxUseModule);
@@ -249,6 +284,9 @@
         private System.Windows.Forms.TextBox textBoxModule;
         private System.Windows.Forms.Timer timer;
         private System.Windows.Forms.Label timeLabel;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button buttonAddEquation;
+        private System.Windows.Forms.Button button2;
     }
 }
 

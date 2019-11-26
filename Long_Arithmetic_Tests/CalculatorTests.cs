@@ -239,6 +239,16 @@ namespace Long_Arithmetic_Tests
 
             Assert.AreEqual("1504", result);
         }
+
+        [TestMethod]
+        public void Sqrt_4312_return_65()
+        {
+            var a = new Number(4312);
+
+            string result = Number.Sqrt(a).ToString();
+
+            Assert.AreEqual("65", result);
+        }
         #endregion
     }
 }
