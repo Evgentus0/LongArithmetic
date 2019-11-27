@@ -29,6 +29,10 @@ namespace Long_Arithmetic_BL
             {
                 return _isPositive;
             }
+            private set
+            {
+                _isPositive = value;
+            }
         }
 
         public Number()
@@ -218,9 +222,32 @@ namespace Long_Arithmetic_BL
         //Calculator
         public static Number Add(Number firstExpr, Number secondExpr)
         {
+            char sign='+';
+            if (firstExpr.IsPositive && secondExpr.IsPositive)
+            {
+                sign = '+';
+            }
+
+            else if (!firstExpr.IsPositive && !secondExpr.IsPositive)
+            {
+                sign = '-';
+            }
+
+            else if (firstExpr.IsPositive && !secondExpr.IsPositive)
+            {
+                secondExpr.IsPositive = true;
+                return Subtract(firstExpr, secondExpr);
+            }
+
+            else
+            {
+                firstExpr.IsPositive = true;
+                return Subtract(secondExpr, firstExpr);
+            }
+
             var sum = AddRelevantElements(firstExpr.Value, secondExpr.Value);
             AlignRanks(sum);
-            return new Number(sum, '+');
+            return new Number(sum, sign);
         }
 
         private static List<ulong> AddRelevantElements(List<ulong> first, List<ulong> second)
@@ -268,6 +295,23 @@ namespace Long_Arithmetic_BL
 
         public static Number Subtract(Number a, Number b)
         {
+            if (!a.IsPositive && !b.IsPositive)
+            {
+                a.IsPositive = true;
+                b.IsPositive = true;
+                return Subtract(b, a);
+            }
+            else if (a.IsPositive && !b.IsPositive)
+            {
+                b.IsPositive = true;
+                return Add(a, b);
+            }
+            else if (!a.IsPositive && b.IsPositive)
+            {
+                b.IsPositive = false;
+                return Add(a, b);
+            }
+
             char sign;
             List<ulong> minued;
             List<ulong> subtrahend;
@@ -340,6 +384,16 @@ namespace Long_Arithmetic_BL
 
         public static Number Multiply(Number a, Number b)
         {
+            char sign = '+';
+            if (a.IsPositive == b.IsPositive)
+            {
+                sign = '+';
+            }
+            else
+            {
+                sign = '-';
+            }
+
             var factor1 = a.Value;
             var factor2 = b.Value;
 
@@ -351,8 +405,7 @@ namespace Long_Arithmetic_BL
                 result = AddRelevantElements(result, mul);
                 AlignRanks(result);
             }
-            // MultiplyByRef(factor1, factor2);
-            return new Number(result, '+');
+            return new Number(result, sign);
         }
 
         private static List<List<ulong>> GetAllArraysOfElements(List<ulong> factor1, List<ulong> factor2)
@@ -382,6 +435,15 @@ namespace Long_Arithmetic_BL
             {
                 throw new DivideByZeroException("Incorrect input data!");
             }
+            char sign = '+';
+            if (a.IsPositive == b.IsPositive)
+            {
+                sign = '+';
+            }
+            else
+            {
+                sign = '-';
+            }
 
             if (a < b)
             {
@@ -393,6 +455,8 @@ namespace Long_Arithmetic_BL
             }
             else
             {
+                a.IsPositive = true;
+                b.IsPositive = true;
                 var beginDividend = new Number(a.Value, '+');
 
                 List<ulong> result = new List<ulong>();
@@ -418,9 +482,12 @@ namespace Long_Arithmetic_BL
                     result.Insert(0, 0);
                 }
 
-                var resultOfDivide = new Number(result, '+');
+                var resultOfDivide = new Number(result, sign);
 
-                var rest = Subtract(beginDividend, Multiply(b, resultOfDivide));
+                var multi = Multiply(b, resultOfDivide);
+                multi.IsPositive = true;
+                beginDividend.IsPositive = true;
+                var rest = Subtract(beginDividend, multi);
 
                 return (resultOfDivide, rest);
             }
@@ -491,6 +558,26 @@ namespace Long_Arithmetic_BL
 
         public static Number Exponent(Number a, Number n)
         {
+            char sign = '+';
+
+            if (!n.IsPositive)
+            {
+                return new Number(0);
+            }
+
+            if (!a.IsPositive)
+            {
+                if (n.Value.First() % 2 == 1)
+                {
+                    sign = '-';
+                }
+            }
+
+            if(n.ToString() == "0" || a.ToString() == "0")
+            {
+                throw new ArgumentException("Uncertainty!");
+            }
+
             if (n.ToString() == "0" || a.ToString() == "1")
             {
                 return new Number(1);
@@ -503,7 +590,7 @@ namespace Long_Arithmetic_BL
             {
                 var num1 = new Number(new List<ulong>(a.Value), '+');
                 var num2 = new Number(new List<ulong>(n.Value), '+');
-                return new Number(DoExponent(num1.Value, num2.Value), '+');
+                return new Number(DoExponent(num1.Value, num2.Value), sign);
             }
         }
 
@@ -613,6 +700,15 @@ namespace Long_Arithmetic_BL
 
         public static Number ExponentWithModule(Number a, Number b, Number module)
         {
+            if (!b.IsPositive)
+            {
+                return new Number(0);
+            }
+            if (!module.IsPositive)
+            {
+                throw new ArgumentException("Module must be great then 0");
+            }
+
             if (module.ToString() == "1" || a.ToString() == "1" || a.ToString() == "0" || b.ToString() == "0")
             {
                 if (a.ToString() == "0")
