@@ -45,9 +45,11 @@
             this.textBoxModule = new System.Windows.Forms.TextBox();
             this.timer = new System.Windows.Forms.Timer(this.components);
             this.timeLabel = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
+            this.labelChina = new System.Windows.Forms.Label();
             this.buttonAddEquation = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.buttonRemove = new System.Windows.Forms.Button();
+            this.button = new System.Windows.Forms.Button();
+            this.buttonRemoveEquation = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -205,14 +207,15 @@
             this.timeLabel.TabIndex = 15;
             this.timeLabel.Text = "0 h, 0 m, 0 s";
             // 
-            // label7
+            // labelChina
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(699, 128);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(460, 20);
-            this.label7.TabIndex = 16;
-            this.label7.Text = "Click \"add\" to add the equation and click \"delete\" for remove last\r\n";
+            this.labelChina.AutoSize = true;
+            this.labelChina.Location = new System.Drawing.Point(699, 128);
+            this.labelChina.Name = "labelChina";
+            this.labelChina.Size = new System.Drawing.Size(460, 20);
+            this.labelChina.TabIndex = 16;
+            this.labelChina.Text = "Click \"add\" to add the equation and click \"delete\" for remove last\r\n";
+            this.labelChina.Visible = false;
             // 
             // buttonAddEquation
             // 
@@ -222,16 +225,41 @@
             this.buttonAddEquation.TabIndex = 17;
             this.buttonAddEquation.Text = "add";
             this.buttonAddEquation.UseVisualStyleBackColor = true;
+            this.buttonAddEquation.Visible = false;
             this.buttonAddEquation.Click += new System.EventHandler(this.ButtonAddEquation_Click);
             // 
-            // button2
+            // buttonRemove
             // 
-            this.button2.Location = new System.Drawing.Point(1091, 162);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(68, 41);
-            this.button2.TabIndex = 18;
-            this.button2.Text = "delete";
-            this.button2.UseVisualStyleBackColor = true;
+            this.buttonRemove.Location = new System.Drawing.Point(1091, 162);
+            this.buttonRemove.Name = "buttonRemove";
+            this.buttonRemove.Size = new System.Drawing.Size(68, 41);
+            this.buttonRemove.TabIndex = 18;
+            this.buttonRemove.Text = "delete";
+            this.buttonRemove.UseVisualStyleBackColor = true;
+            this.buttonRemove.Visible = false;
+            this.buttonRemove.Click += new System.EventHandler(this.Button2_Click);
+            // 
+            // button
+            // 
+            this.button.Location = new System.Drawing.Point(1091, 162);
+            this.button.Name = "button";
+            this.button.Size = new System.Drawing.Size(68, 41);
+            this.button.TabIndex = 18;
+            this.button.Text = "delete";
+            this.button.UseVisualStyleBackColor = true;
+            this.button.Visible = false;
+            this.button.Click += new System.EventHandler(this.Button2_Click);
+            // 
+            // buttonRemoveEquation
+            // 
+            this.buttonRemoveEquation.Location = new System.Drawing.Point(1091, 162);
+            this.buttonRemoveEquation.Name = "buttonRemoveEquation";
+            this.buttonRemoveEquation.Size = new System.Drawing.Size(68, 41);
+            this.buttonRemoveEquation.TabIndex = 18;
+            this.buttonRemoveEquation.Text = "delete";
+            this.buttonRemoveEquation.UseVisualStyleBackColor = true;
+            this.buttonRemoveEquation.Visible = false;
+            this.buttonRemoveEquation.Click += new System.EventHandler(this.Button2_Click);
             // 
             // Form1
             // 
@@ -239,9 +267,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(1236, 512);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.buttonRemove);
             this.Controls.Add(this.buttonAddEquation);
-            this.Controls.Add(this.label7);
+            this.Controls.Add(this.labelChina);
             this.Controls.Add(this.timeLabel);
             this.Controls.Add(this.textBoxModule);
             this.Controls.Add(this.checkBoxUseModule);
@@ -284,9 +312,12 @@
         private System.Windows.Forms.TextBox textBoxModule;
         private System.Windows.Forms.Timer timer;
         private System.Windows.Forms.Label timeLabel;
-        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label labelChina;
         private System.Windows.Forms.Button buttonAddEquation;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button buttonRemove;
+        private System.Windows.Forms.Button button;
+        private System.Windows.Forms.Button buttonRemoveEquation;
     }
 }
 

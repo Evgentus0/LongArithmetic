@@ -705,6 +705,60 @@ namespace Long_Arithmetic_BL
             }
         }
 
+        public static Number ChinaTheoreme(List<StructureForModEquations> equations)
+        {
+            PutMultipleValue(equations);
+
+            PutFindingValue(equations);
+
+            Number almostRes = new Number(0);
+            Number multiplyAllMod = new Number(1);
+
+            foreach(var e in equations)
+            {
+                almostRes = Add(almostRes, Multiply(e.multipleAllValues, Multiply(e.findingNumber, e.value)));
+                multiplyAllMod = Multiply(multiplyAllMod, e.mod);
+            }
+
+            return Divide(almostRes, multiplyAllMod).rest;
+        }
+
+        private static void PutMultipleValue(List<StructureForModEquations> equations)
+        {
+            foreach(var e in equations)
+            {
+                Number set = new Number(1);
+                foreach(var l in equations.Where(x => x.index != e.index))
+                {
+                    set = Multiply(set, l.mod);
+                }
+                e.multipleAllValues = set;
+            }
+        }
+
+        private static void PutFindingValue(List<StructureForModEquations> equations)
+        {
+            foreach(var e in equations)
+            {
+                EvklidSearch(e);
+            }
+        }
+
+        private static void EvklidSearch(StructureForModEquations equation)
+        {
+            Number divider = equation.mod;
+
+            Number rest = Divide(equation.multipleAllValues, divider).rest;
+
+            while(rest!=new Number(1))
+            {
+                Number temp = new Number(divider.Value, '+');
+                divider = new Number(rest.Value, '+');
+                rest = Divide(temp, divider).rest;
+            }
+
+            equation.findingNumber = new Number(divider.Value, '+');
+        }
         #region Async Method
         public static async Task<Number> AddAsync(Number a, Number b)
         {
@@ -746,7 +800,6 @@ namespace Long_Arithmetic_BL
             return await Task.Run(() => Sqrt(a));
         }
         #endregion
-
 
     }
 }
