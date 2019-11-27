@@ -220,11 +220,14 @@ namespace Long_Arithmetic
 
         private void ButtonAddEquation_Click(object sender, EventArgs e)
         {
-
             _countOfEqutation++;
 
+            int width = 600;
+            int height = 40 * _countOfEqutation + 180;
+
+
             Label count = new Label();
-            Point pcount = new Point(700, 40 * _countOfEqutation + 180);
+            Point pcount = new Point(width, height);
             count.Location = pcount;
             count.Name = "labelEquation" + _countOfEqutation.ToString();
 
@@ -233,7 +236,7 @@ namespace Long_Arithmetic
 
 
             TextBox first = new TextBox();
-            Point pfirst = new Point(765, 40 * _countOfEqutation + 180);
+            Point pfirst = new Point(width+100, height);
             first.Location = pfirst;
 
             Size sizef = new Size(150, 20);
@@ -245,7 +248,7 @@ namespace Long_Arithmetic
 
 
             Label mod = new Label();
-            Point pmod = new Point(920, 40 * _countOfEqutation + 180);
+            Point pmod = new Point(width+270, height);
             mod.Location = pmod;
             mod.Name = "labelMod" + _countOfEqutation.ToString();
 
@@ -253,7 +256,7 @@ namespace Long_Arithmetic
             this.Controls.Add(mod);
 
             TextBox second = new TextBox();
-            Point psecond = new Point(980, 40 * _countOfEqutation + 180);
+            Point psecond = new Point(width+380, height);
             second.Location = psecond;
 
             Size sizes = new Size(150, 20);

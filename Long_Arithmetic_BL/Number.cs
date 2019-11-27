@@ -836,24 +836,24 @@ namespace Long_Arithmetic_BL
         {
             foreach(var e in equations)
             {
-                EvklidSearch(e);
+                SearchValue(e);
             }
         }
 
-        private static void EvklidSearch(StructureForModEquations equation)
+        private static void SearchValue(StructureForModEquations equation)
         {
-            Number divider = equation.mod;
+            var temp = Module(equation.multipleAllValues, equation.mod);
+            long res = 1;
 
-            Number rest = Divide(equation.multipleAllValues, divider).rest;
-
-            while(rest!=new Number(1))
+            for(long i = 1; i <= long.MaxValue; i++)
             {
-                Number temp = new Number(divider.Value, '+');
-                divider = new Number(rest.Value, '+');
-                rest = Divide(temp, divider).rest;
+                if(Module(Multiply(temp, new Number(i)), equation.mod).ToString() == "1")
+                {
+                    res = i;
+                    break;
+                }
             }
-
-            equation.findingNumber = new Number(divider.Value, '+');
+            equation.findingNumber = new Number(res);
         }
         #region Async Method
         public static async Task<Number> AddAsync(Number a, Number b)
