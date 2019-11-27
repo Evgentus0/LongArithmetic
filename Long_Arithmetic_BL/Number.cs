@@ -535,6 +535,7 @@ namespace Long_Arithmetic_BL
 
         private static ulong GetQuotient(List<ulong> dividende, List<ulong> divider, ulong leftBorder, ulong rightBorder)
         {
+
             ulong currentQuotient = (leftBorder + rightBorder) / 2;
             var currentDividende = new Number(dividende, '+');
             var currentDivider = new Number(divider, '+');
@@ -855,6 +856,7 @@ namespace Long_Arithmetic_BL
             }
             equation.findingNumber = new Number(res);
         }
+
         #region Async Method
         public static async Task<Number> AddAsync(Number a, Number b)
         {
