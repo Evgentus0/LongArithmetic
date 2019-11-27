@@ -21,7 +21,23 @@ namespace Long_Arithmetic
         public Form1()
         {
             InitializeComponent();
-            string[] operations = { "Add", "Subtract", "Multiply", "Divide", "Power", "Module", "Sqrt", "China theoreme" };
+            string[] operations =
+            {
+                "Add",
+                "Subtract",
+                "Multiply",
+                "Divide",
+                "Power",
+                "Module",
+                "Sqrt",
+                "China theoreme",
+                "Less",
+                "Great",
+                "Less or Equal",
+                "Great or Equal",
+                "Equal",
+                "Not Equal"
+            };
             comboBoxOperation.DataSource = operations;
             _timeSecond = 0;
             _timeMinute = 0;
@@ -63,6 +79,8 @@ namespace Long_Arithmetic
 
                     labelRest.Text = "0";
 
+                    string resultString="";
+                    bool isLogical=false;
                     Number result = new Number();
                     timer.Interval = 10;
                     timer.Start();
@@ -137,9 +155,37 @@ namespace Long_Arithmetic
                                 result = Number.Sqrt(num1);
                             }
                             break;
+                        case "Less":
+                            isLogical = true;
+                            resultString= (num1 < num2).ToString();
+                            break;
+                        case "Great":
+                            isLogical = true;
+                            resultString = (num1 > num2).ToString();
+                            break;
+                        case "Less or Equal":
+                            isLogical = true;
+                            resultString = (num1 <= num2).ToString();
+                            break;
+                        case "Great or Equal":
+                            isLogical = true;
+                            resultString = (num1 >= num2).ToString();
+                            break;
+                        case "Equal":
+                            isLogical = true;
+                            resultString = (num1 == num2).ToString();
+                            break;
+                        case "Not Equal":
+                            isLogical = true;
+                            resultString = (num1 != num2).ToString();
+                            break;
                     }
                     timer.Stop();
-                    string resultString = result.ToString();
+                    if (!isLogical)
+                    {
+                        resultString = result.ToString();
+                    }
+                        
                     using (StreamWriter writer = new StreamWriter(@"C:\Users\Evgentus\Desktop\result.txt", false))
                     {
                         await writer.WriteLineAsync(resultString);  // асинхронная запись в файл
@@ -199,23 +245,31 @@ namespace Long_Arithmetic
 
         private void ComboBoxOperation_SelectedIndexChanged(object sender, EventArgs e)
         {
+
+            textBoxSecondOperand.Enabled = true;
+
+            HideAllEquations();
+            buttonAddEquation.Visible = false;
+            buttonRemove.Visible = false;
+            labelChina.Visible = false;
+
             var list = (ComboBox)sender;
             if (list.SelectedValue.ToString() == "Sqrt")
             {
                 textBoxSecondOperand.Enabled = false;
                 return;
             }
-            textBoxSecondOperand.Enabled = true;
+
             if (list.SelectedValue.ToString() == "China theoreme")
             {
+
                 buttonAddEquation.Visible = true;
                 buttonRemove.Visible = true;
                 labelChina.Visible = true;
+                ShowAllEquations();
                 return;
             }
-            buttonAddEquation.Visible = false;
-            buttonRemove.Visible = false;
-            labelChina.Visible = false;
+
         }
 
         private void ButtonAddEquation_Click(object sender, EventArgs e)
@@ -236,7 +290,7 @@ namespace Long_Arithmetic
 
 
             TextBox first = new TextBox();
-            Point pfirst = new Point(width+100, height);
+            Point pfirst = new Point(width + 100, height);
             first.Location = pfirst;
 
             Size sizef = new Size(150, 20);
@@ -248,7 +302,7 @@ namespace Long_Arithmetic
 
 
             Label mod = new Label();
-            Point pmod = new Point(width+270, height);
+            Point pmod = new Point(width + 270, height);
             mod.Location = pmod;
             mod.Name = "labelMod" + _countOfEqutation.ToString();
 
@@ -256,7 +310,7 @@ namespace Long_Arithmetic
             this.Controls.Add(mod);
 
             TextBox second = new TextBox();
-            Point psecond = new Point(width+380, height);
+            Point psecond = new Point(width + 380, height);
             second.Location = psecond;
 
             Size sizes = new Size(150, 20);
@@ -271,23 +325,68 @@ namespace Long_Arithmetic
         {
             if (_countOfEqutation > 0)
             {
-                var count = this.Controls.Find("labelEquation" + _countOfEqutation.ToString(), false);
-                count[0].Dispose();
-
-                var first = this.Controls.Find("textBoxEquationFirst" + _countOfEqutation.ToString(), false);
-                first[0].Dispose();
-
-                var mod = this.Controls.Find("labelMod" + _countOfEqutation.ToString(), false);
-                mod[0].Dispose();
-
-                var second = this.Controls.Find("textBoxEquationSecond" + _countOfEqutation.ToString(), false);
-                second[0].Dispose();
-
-                _countOfEqutation--;
+              
                 try
                 {
-                    var masked = this.Controls.Find("maskedTextBoxCommand" + _countOfEqutation.ToString(), false);
-                    masked[0].Dispose();
+                    var count = this.Controls.Find("labelEquation" + _countOfEqutation.ToString(), false);
+                    count[0].Dispose();
+
+                    var first = this.Controls.Find("textBoxEquationFirst" + _countOfEqutation.ToString(), false);
+                    first[0].Dispose();
+
+                    var mod = this.Controls.Find("labelMod" + _countOfEqutation.ToString(), false);
+                    mod[0].Dispose();
+
+                    var second = this.Controls.Find("textBoxEquationSecond" + _countOfEqutation.ToString(), false);
+                    second[0].Dispose();
+
+                    _countOfEqutation--;
+                }
+                catch { }
+            }
+        }
+
+        private void HideAllEquations()
+        {
+            for(int i = _countOfEqutation; i > 0; i--)
+            {
+                try
+                {
+                    var count = this.Controls.Find("labelEquation" + i.ToString(), false);
+                    count[0].Visible=false;
+
+                    var first = this.Controls.Find("textBoxEquationFirst" + i.ToString(), false);
+                    first[0].Visible = false;
+
+                    var mod = this.Controls.Find("labelMod" + i.ToString(), false);
+                    mod[0].Visible = false;
+
+                    var second = this.Controls.Find("textBoxEquationSecond" + i.ToString(), false);
+                    second[0].Visible = false;
+
+                }
+                catch { }
+            }
+        }
+
+        private void ShowAllEquations()
+        {
+            for (int i = _countOfEqutation; i > 0; i--)
+            {
+                try
+                {
+                    var count = this.Controls.Find("labelEquation" + i.ToString(), false);
+                    count[0].Visible = true;
+
+                    var first = this.Controls.Find("textBoxEquationFirst" + i.ToString(), false);
+                    first[0].Visible = true;
+
+                    var mod = this.Controls.Find("labelMod" + i.ToString(), false);
+                    mod[0].Visible = true;
+
+                    var second = this.Controls.Find("textBoxEquationSecond" + i.ToString(), false);
+                    second[0].Visible = true;
+
                 }
                 catch { }
             }
@@ -307,12 +406,12 @@ namespace Long_Arithmetic
             List<StructureForModEquations> result = new List<StructureForModEquations>();
 
             var first = GetAll(this, typeof(TextBox)).Where(x => x.Name.Contains("textBoxEquationFirst"));
-            var second= GetAll(this, typeof(TextBox)).Where(x => x.Name.Contains("textBoxEquationSecond"));
+            var second = GetAll(this, typeof(TextBox)).Where(x => x.Name.Contains("textBoxEquationSecond"));
 
             string[] firstValue = new string[first.Count()];
             string[] secondValue = new string[second.Count()];
             int i = 0;
-            foreach(var f in first)
+            foreach (var f in first)
             {
                 firstValue[i] = f.Text;
                 i++;
@@ -324,9 +423,9 @@ namespace Long_Arithmetic
                 i++;
             }
 
-            for(i=0; i < firstValue.Length; i++)
+            for (i = 0; i < firstValue.Length; i++)
             {
-                result.Add(new StructureForModEquations(i+1, new Number(firstValue[i]), new Number(secondValue[i])));
+                result.Add(new StructureForModEquations(i + 1, new Number(firstValue[i]), new Number(secondValue[i])));
             }
 
             return result;
