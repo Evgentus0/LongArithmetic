@@ -219,10 +219,40 @@ namespace Long_Arithmetic_BL
             return a.CompareTo(b) != 0;
         }
 
+        public static Number operator +(Number a, Number b)
+        {
+            return Add(a, b);
+        }
+
+        public static Number operator -(Number a, Number b)
+        {
+            return Subtract(a, b);
+        }
+
+        public static Number operator *(Number a, Number b)
+        {
+            return Multiply(a, b);
+        }
+
+        public static (Number result, Number rest) operator /(Number a, Number b)
+        {
+            return Divide(a, b);
+        }
+
+        public static Number operator ^(Number a, Number b)
+        {
+            return Exponent(a, b);
+        }
+
+        public static Number operator %(Number a, Number b)
+        {
+            return Module(a, b);
+        }
+
         //Calculator
         public static Number Add(Number firstExpr, Number secondExpr)
         {
-            char sign='+';
+            char sign = '+';
             if (firstExpr.IsPositive && secondExpr.IsPositive)
             {
                 sign = '+';
@@ -574,7 +604,7 @@ namespace Long_Arithmetic_BL
                 }
             }
 
-            if(n.ToString() == "0" || a.ToString() == "0")
+            if (n.ToString() == "0" || a.ToString() == "0")
             {
                 throw new ArgumentException("Uncertainty!");
             }
@@ -589,46 +619,46 @@ namespace Long_Arithmetic_BL
             }
             else
             {
-                var num1 = new Number(new List<ulong>(a.Value), '+');
-                var num2 = new Number(new List<ulong>(n.Value), '+');
-                return new Number(DoExponent(num1.Value, num2.Value), sign);
+                var num1 = new List<ulong>(a.Value);
+                var num2 = new List<ulong>(n.Value);
+                return new Number(DoExponent(num1, num2), sign);
             }
         }
 
         private static List<ulong> DoExponent(List<ulong> a, List<ulong> b)
         {
-            //var result = new List<ulong>(a);
 
-            //while (!(b.Count == 1 && b.First() < 2))
+            //if (b.Count == 1 && b.First() < 2)
             //{
-            //    MultiplyByRef(result, result);
-
-            //    if (b.First() % 2 != 0)
-            //    {
-            //        MultiplyByRef(result, a);
-            //    }
-            //    DivideByTwo(b);
+            //    return a;
             //}
 
-            //return new Number(result, '+');
+            //else
+            //{
+            //    var x = DoExponent(a, Divide(new Number(b, '+'), new Number(2)).result.Value);
+            //    if (b.First() % 2 == 0)
+            //    {
+            //        return Multiply(new Number(x, '+'), new Number(x, '+')).Value;
+            //    }
+            //    else
+            //    {
+            //        return Multiply(new Number(x, '+'), Multiply(new Number(x, '+'), new Number(a, '+'))).Value;
+            //    }
 
-            if (b.Count == 1 && b.First() < 2)
+            //}
+            var result = new List<ulong>() { 1};
+
+            while (!(b.Count == 1 && b.First() == 0))
             {
-                return a;
+                if (b.First() % 2 == 1)
+                {
+                    MultiplyByRef(result, a);
+                }
+                MultiplyByRef(a, a);
+                DivideByTwo(b);
             }
 
-            else
-            {
-                var x = DoExponent(a, Divide(new Number(b, '+'), new Number(2)).result.Value);
-                if (b.First() % 2 == 0)
-                {
-                    return Multiply(new Number(x, '+'), new Number(x, '+')).Value;
-                }
-                else
-                {
-                    return Multiply(new Number(x, '+'), Multiply(new Number(x, '+'), new Number(a, '+'))).Value;
-                }
-            }
+            return result;
         }
 
         private static void MultiplyByRef(List<ulong> result, List<ulong> a)
@@ -664,9 +694,16 @@ namespace Long_Arithmetic_BL
         private static void DivideByTwo(List<ulong> dividend)
         {
             ulong current;
+            bool isOdd = false;
             for (int i = dividend.Count - 1; i >= 0; i--)
             {
                 current = dividend[i];
+                if (isOdd)
+                {
+                    current += BASE;
+                    isOdd = false;
+                }
+
                 if (current == 0)
                 {
                     continue;
@@ -685,13 +722,17 @@ namespace Long_Arithmetic_BL
                 }
                 else
                 {
+                    if (dividend[i] % 2 == 1)
+                    {
+                        isOdd = true;
+                    }
                     dividend[i] = current / 2;
                 }
             }
-            if (dividend[dividend.Count - 1] == 0)
-            {
-                dividend.RemoveAt(dividend.Count - 1);
-            }
+            //if (dividend[dividend.Count - 1] == 0)
+            //{
+            //    dividend.RemoveAt(dividend.Count - 1);
+            //}
         }
 
         public static Number Module(Number a, Number b)
@@ -777,7 +818,8 @@ namespace Long_Arithmetic_BL
 
         private static Number DoSqrt(Number x, Number a, Number b)
         {
-            if(Add(a, new Number(1)) == b){
+            if (Add(a, new Number(1)) == b)
+            {
                 if (Multiply(b, b) <= x)
                 {
                     return b;
@@ -791,7 +833,7 @@ namespace Long_Arithmetic_BL
             {
                 Number middle = Add(a, b);
                 DivideByTwo(middle.Value);
-                if(Multiply(middle, middle) < x)
+                if (Multiply(middle, middle) < x)
                 {
                     return DoSqrt(x, middle, b);
                 }
@@ -811,7 +853,7 @@ namespace Long_Arithmetic_BL
             Number almostRes = new Number(0);
             Number multiplyAllMod = new Number(1);
 
-            foreach(var e in equations)
+            foreach (var e in equations)
             {
                 almostRes = Add(almostRes, Multiply(e.multipleAllValues, Multiply(e.findingNumber, e.value)));
                 multiplyAllMod = Multiply(multiplyAllMod, e.mod);
@@ -822,10 +864,10 @@ namespace Long_Arithmetic_BL
 
         private static void PutMultipleValue(List<StructureForModEquations> equations)
         {
-            foreach(var e in equations)
+            foreach (var e in equations)
             {
                 Number set = new Number(1);
-                foreach(var l in equations.Where(x => x.index != e.index))
+                foreach (var l in equations.Where(x => x.index != e.index))
                 {
                     set = Multiply(set, l.mod);
                 }
@@ -835,7 +877,7 @@ namespace Long_Arithmetic_BL
 
         private static void PutFindingValue(List<StructureForModEquations> equations)
         {
-            foreach(var e in equations)
+            foreach (var e in equations)
             {
                 SearchValue(e);
             }
@@ -846,15 +888,20 @@ namespace Long_Arithmetic_BL
             var temp = Module(equation.multipleAllValues, equation.mod);
             long res = 1;
 
-            for(long i = 1; i <= long.MaxValue; i++)
+            for (long i = 1; i <= long.MaxValue; i++)
             {
-                if(Module(Multiply(temp, new Number(i)), equation.mod).ToString() == "1")
+                if (Module(Multiply(temp, new Number(i)), equation.mod).ToString() == "1")
                 {
                     res = i;
                     break;
                 }
             }
             equation.findingNumber = new Number(res);
+        }
+
+        public static Number Abs(Number a)
+        {
+            return new Number(a.Value, '+');
         }
 
         #region Async Method
@@ -899,6 +946,50 @@ namespace Long_Arithmetic_BL
         }
         #endregion
 
+    }
+
+    public class Methods
+    {
+        private Number GreaterCommonDivider(Number a, Number b)
+        {
+            while (b.ToString() != "0")
+            {
+                a = a % b;
+                if (a.ToString() == "0")
+                {
+                    return b;
+                }
+                b = b % a;
+            }
+            return a;
+        }
+
+        // это нашел только один множитель, нужно короче проверить число на простоту, если не простое, 
+       // поделить на результат и потом исследовать получившееся, то есть проверить его на простоту и если нужно найти его 
+            //простой делитель
+        public Number RoPolland(Number n)
+        {
+            Random r = new Random();
+            Number one = new Number(1);
+            var insert = r.Next(1, (int)n.Value.First());
+            Number x = new Number(insert);
+            Number y = new Number(1);
+            ulong i = 1;
+            ulong j = 2;
+            Number d = GreaterCommonDivider(n, Number.Abs(x - y));
+            while (d<=one)
+            {
+                if (i == j)
+                {
+                    y = x;
+                    j = j * 2;
+                }
+                x = (x * x - one) % n;
+                i++;
+                d = GreaterCommonDivider(n, Number.Abs(x - y));
+            }
+            return d;
+        }
     }
 }
 
